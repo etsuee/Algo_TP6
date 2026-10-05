@@ -1,4 +1,4 @@
-// Etape 1 : Modelisation des données
+// =============== Etape 1 : Modelisation des données ===============
 
 class Athlete {
   constructor(nom, prenom, age, pays, equipe) {
@@ -18,6 +18,9 @@ class Athlete {
   }
 }
 
+bolt = new Athlete("Bolt", "Usain", 30, "Jamaique", "Lightning");
+console.log(bolt.toString());
+
 class Epreuve {
   constructor(nom, type, unite, sensTri, resultats) {
     this.nom = nom;
@@ -31,13 +34,13 @@ class Epreuve {
     this.resultats.set(athlete, score);
   }
 
+  classementScores() {
+    const sens = this.sensTri === "ASC" ? 1 : -1;
+    return [...this.resultats.entries()].sort((a, b) => sens * (a[1] - b[1]));
+  }
+
   classement() {
-    if (this.sensTri === "ASC") {
-      let res = [];
-      res.sort((a, b) => a - b);
-    } else {
-      res.sort((a, b) => b - a);
-    }
+    return this.classementScores().map(([athlete]) => athlete);
   }
 }
 
@@ -56,36 +59,39 @@ class Competition {
   ajouterEpreuve(e) {
     this.epreuves.push(e);
   }
+
+  afficherResultatsEpreuve(nomEpreuve) {}
 }
 
-// Etape 2 : Gestion des scores
+// =============== Etape 2 : Gestion des scores ===============
+
+// Création comptétition
+const compet = new Competition("Olympics", 2030);
 
 // Créer 8 athletes de 4 pays : 2 equipes
-const bolt = new Athlete("Bolt", "Usain", 30, "Jamaique", "Lightning");
-console.log(bolt.toString());
-const blake = new Athlete("Blake", "Yohan", 28, "Jamaique", "Thunder");
-const gatlin = new Athlete("Gatlin", "Justin", 33, "USA", "Lightning");
-const coleman = new Athlete("Coleman", "Christian", 25, "USA", "Thunder");
-const lem = new Athlete("Lemaitre", "Christophe", 27, "France", "Lightning");
-const vicaut = new Athlete("Vicaut", "Jimmy", 29, "France", "Thunder");
-const su = new Athlete("Su", "Bingtian", 26, "Chine", "Lightning");
-const xie = new Athlete("Xie", "Zhenye", 24, "Chine", "Thunder");
+const athletes = [
+  bolt,
+  new Athlete("Blake", "Yohan", 28, "Jamaique", "Thunder"),
+  new Athlete("Gatlin", "Justin", 33, "USA", "Lightning"),
+  new Athlete("Coleman", "Christian", 25, "USA", "Thunder"),
+  new Athlete("Lemaitre", "Christophe", 27, "France", "Lightning"),
+  new Athlete("Vicaut", "Jimmy", 29, "France", "Thunder"),
+  new Athlete("Su", "Bingtian", 26, "Chine", "Lightning"),
+  new Athlete("Xie", "Zhenye", 24, "Chine", "Thunder"),
+];
 
 // Créer 3 epreuves
-const m100 = new Epreuve("100m", "individuel", "secondes", "ASC");
-const sautLong = new Epreuve(
-  "Saut en longueur",
-  "individuel",
-  "metres",
-  "DESC",
-);
-const lancePoids = new Epreuve(
-  "Lancer du poids",
-  "individuel",
-  "metres",
-  "DESC",
-);
+const epreuves = [
+  (m100 = new Epreuve("100m", "individuel", "secondes", "ASC")),
+  (sautLong = new Epreuve("Saut en longueur", "individuel", "metres", "DESC")),
+  (lancePoids = new Epreuve("Lancer du poids", "individuel", "metres", "DESC")),
+];
+
+// ajout athletes et epreuves dans la competition
+athletes.forEach((a) => compet.ajouterAthlete(a));
+epreuves.forEach((e) => compet.ajouterEpreuve(e));
 
 // scores
 const m100Score = [9.58, 9.74, 9.69, 9.89, 10.06, 9.32, 9.84, 9.77];
-const sautLongScore = [];
+const sautLongScore = [4.32, 4.21, 5.17, 5.32, 4.62, 5.75, 6.02, 5.89];
+const lancePoidsScore = [18.2, 20.3, 22.8, 17.2, 18.4, 19.3, 17.6, 17.1];
